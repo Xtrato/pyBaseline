@@ -15,10 +15,13 @@ Usage
 Examples:
 
 To take a baseline of the system and save the results to the file baseline.txt
+
     pyBaseline.py -b baseline.txt
 
 To specify a starting directory use the -r tag. By default it scans the whole drive.
+
     pyBaseline.py -r C:\Users\Name -b baseline.txt
 
 To compare the current system with the previously recorded results stored in baseline.txt.
+
     pyBaseline.py -c baseline.txt
