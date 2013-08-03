@@ -37,12 +37,6 @@ def compare():
                 print filename + ' > ' + str(os.stat(filename).st_mtime) + '\n'
                 #Skips one line if new file is added.
                 inputFile.seek(currentPosition)
-def test():
-    inputFile = open(args.compare, 'r')
-    print inputFile.readline()
-    print inputFile.tell()
-    print inputFile.readline()
-    print inputFile.tell()
 if startingDirectory == None:
     #If running a Windows based system
     if os.name == 'nt':
@@ -53,7 +47,6 @@ if startingDirectory == None:
 print startingDirectory
 if args.compare:
     compare()
-    #test()
 if args.baseline:
     walk()
-print 'done'
+print 'Scan Complete'
