@@ -46,7 +46,7 @@ def test():
 if startingDirectory == None:
     #If running a Windows based system
     if os.name == 'nt':
-        startingDirectory = 'C:\Fraps'
+        startingDirectory = 'C:\\'
     #If running a Unix based system.
     else:
         startingDirectory = '.'
