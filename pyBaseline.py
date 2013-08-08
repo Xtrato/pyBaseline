@@ -1,6 +1,9 @@
 import os
 import argparse
 import re
+from colorama import init, Fore
+init()
+print('This tool is used during dynamic analysis of malware.\n It records a baseline of the systems files and folders which can be compared to after the malware has been executed.\n Please use the -h to view the available arguments.\n Modified files are shown in green text\n New files are shown in red text.')
 parser = argparse.ArgumentParser()
 parser.add_argument('-c','--compare',help='Compares to the baseline. Argument must be the baseline file to be compared to.')
 parser.add_argument('-r','--root',help='Specifies the starting root directory')
@@ -12,12 +15,14 @@ outputFile = 'baseline.txt'
 if startingDirectory == None:
     #If running a Windows based system
     if os.name == 'nt':
-        startingDirectory = 'C:\Fraps'
-        seperator = '\\'
+        startingDirectory = 'C:\\'
     #If running a Unix based system.
     else:
         startingDirectory = '.'
-        seperator = '/'
+if os.name == 'nt':
+    seperator = '\\'
+else:
+    seperator = '/'
 if args.compare:
     filesAdded = 0
     filesModified = 0
@@ -31,20 +36,22 @@ if args.compare:
             filename = root + seperator + file
             #Keeps track of inputFile read location. Used if a file or folder has changed.
             currentPosition = inputFile.tell()
+            currentLine = inputFile.readline()
             #Checks if the current file being observed exists in the inputFile.
-            if inputFile.readline() != filename + ' > ' + str(os.stat(filename).st_mtime) + '\n':
+            if currentLine != filename + ' > ' + str(os.stat(filename).st_mtime) + '\n':
                 #If only the filename is the same but the modification time has changed.
-                inputFile.seek(currentPosition)
-                if inputFile.readline()[:re.search('>', inputFile.readline()).start()] == filename:
+                if currentLine[:re.search('>', currentLine).start() - 1] == filename:
                     filesModified = filesModified + 1
                     #Prints the filename / location and modification date if file is new or modified.
-                    print filename + ' > ' + str(os.stat(filename).st_mtime) + '\n'
+                    print(Fore.GREEN + filename + ' > ' + str(os.stat(filename).st_mtime) + '\n')
+                    print(Fore.RESET)
                 else:
                     filesAdded = filesAdded + 1
                     #Prints the filename / location and modification date if file is new or modified.
-                    print filename + ' > ' + str(os.stat(filename).st_mtime) + '\n'
-            #Skips one line back if new file is added.
-            inputFile.seek(currentPosition)
+                    print(Fore.RED + filename + ' > ' + str(os.stat(filename).st_mtime) + '\n')
+                    print(Fore.RESET)
+                    #Skips one line back if new file is added.
+                    inputFile.seek(currentPosition)
     print '[*] Found ' + str(filesAdded) + ' new files and ' + str(filesModified) + ' files altered'
 if args.baseline:
     print '[*] Scanning files and folders'
