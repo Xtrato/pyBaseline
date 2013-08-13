@@ -29,6 +29,8 @@ if args.compare:
     print '[*] Comparing current system files and folders against ' + args.compare + '.'
     #Opens the input file for comparison.
     inputFile = open(args.compare, 'r')
+    #startingDirectory = inputFile.readline()
+    startingDirectory = 'C:\Fraps'
     #iterates through the directory listings
     for root, dirs, files in os.walk(startingDirectory):
         #Iterates through the files
@@ -43,12 +45,12 @@ if args.compare:
                 if currentLine[:re.search('>', currentLine).start() - 1] == filename:
                     filesModified = filesModified + 1
                     #Prints the filename / location and modification date if file is new or modified.
-                    print(Fore.GREEN + filename + ' > ' + str(os.stat(filename).st_mtime) + '\n')
+                    print(Fore.GREEN + filename + ' > ' + str(os.stat(filename).st_mtime))
                     print(Fore.RESET)
                 else:
                     filesAdded = filesAdded + 1
                     #Prints the filename / location and modification date if file is new or modified.
-                    print(Fore.RED + filename + ' > ' + str(os.stat(filename).st_mtime) + '\n')
+                    print(Fore.RED + filename + ' > ' + str(os.stat(filename).st_mtime))
                     print(Fore.RESET)
                     #Skips one line back if new file is added.
                     inputFile.seek(currentPosition)
@@ -57,6 +59,9 @@ if args.baseline:
     print '[*] Scanning files and folders'
     #clears the output file if it previously exists.
     output = open(args.baseline, 'w')
+    output.close()
+    output = open(args.baseline, 'a')
+    #output.write(startingDirectory + '\n')
     output.close()
     #iterates through the directory listings
     for root, dirs, files in os.walk(startingDirectory):
