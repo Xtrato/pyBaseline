@@ -8,9 +8,9 @@ Usage
       -c COMPARE, --compare COMPARE
                             Compares to the baseline Argument must be the baseline
                             file to be compared to.
-      -r ROOT, --root ROOT  Specifies the starting root directory
+      -r ROOT, --root ROOT  Specifies the starting directory when taking a baseline. Default is the root directory
       -b BASELINE, --baseline BASELINE
-                            Sets to record a baseline
+                            Sets to record a baseline. The argument is the output file name.
 
 Examples:
 

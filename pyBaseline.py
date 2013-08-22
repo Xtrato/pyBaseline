@@ -6,8 +6,8 @@ init()
 print('This tool is used during dynamic analysis of malware.\n It records a baseline of the systems files and folders which can be compared to after the malware has been executed.\n Please use the -h to view the available arguments.\n Modified files are shown in green text\n New files are shown in red text.')
 parser = argparse.ArgumentParser()
 parser.add_argument('-c','--compare',help='Compares to the baseline. Argument must be the baseline file to be compared to.')
-parser.add_argument('-r','--root',help='Specifies the starting root directory')
-parser.add_argument('-b','--baseline',help='Sets to record a baseline')
+parser.add_argument('-r','--root',help='Specifies the starting directory when taking a baseline. Default is the root directory')
+parser.add_argument('-b','--baseline',help='Sets to record a baseline. The argument is the output file name.')
 args = parser.parse_args()
 startingDirectory = args.root
 outputFile = 'baseline.txt'
@@ -29,9 +29,9 @@ if args.compare:
     print '[*] Comparing current system files and folders against ' + args.compare + '.'
     #Opens the input file for comparison.
     inputFile = open(args.compare, 'r')
-    #startingDirectory = inputFile.readline()
-    startingDirectory = 'C:\Fraps'
+    startingDirectory = inputFile.readline()[:-1]
     #iterates through the directory listings
+    count = 0
     for root, dirs, files in os.walk(startingDirectory):
         #Iterates through the files
         for file in files:
@@ -61,7 +61,7 @@ if args.baseline:
     output = open(args.baseline, 'w')
     output.close()
     output = open(args.baseline, 'a')
-    #output.write(startingDirectory + '\n')
+    output.write(startingDirectory + '\n')
     output.close()
     #iterates through the directory listings
     for root, dirs, files in os.walk(startingDirectory):
